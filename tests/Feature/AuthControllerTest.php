@@ -12,7 +12,7 @@ class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testSignup()
+    public function test_user_signup()
     {
         $users = [
             [
@@ -40,7 +40,7 @@ class AuthControllerTest extends TestCase
         }
     }
 
-    public function testSignin()
+    public function test_user_signin()
     {
         User::factory()->create([
             'email' => 'signin@example.com',
@@ -56,7 +56,7 @@ class AuthControllerTest extends TestCase
         $response->assertJsonStructure(['token']);
     }
 
-    public function testSignout()
+    public function test_user_signout()
     {
         $user = User::factory()->create();
         $token = $user->createToken('TestToken')->plainTextToken;

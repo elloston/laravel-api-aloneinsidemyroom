@@ -7,11 +7,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class UserControllerTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCurrentUser()
+    public function test_current_user()
     {
         $user = User::factory()->create();
         $token = $user->createToken('TestToken')->plainTextToken;
@@ -29,7 +29,7 @@ class UserControllerTest extends TestCase
         ]);
     }
 
-    public function testShowUser()
+    public function test_show_user()
     {
         $user = User::factory()->create([
             'username' => 'testuser',
