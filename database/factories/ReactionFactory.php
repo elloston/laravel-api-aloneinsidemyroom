@@ -2,14 +2,17 @@
 
 namespace Database\Factories;
 
+use App\Models\Reaction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Message>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Reaction>
  */
-class MessageFactory extends Factory
+class ReactionFactory extends Factory
 {
+    protected $model = Reaction::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,9 +21,9 @@ class MessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => fake()->text,
+            'message_id' => Reaction::factory(),
             'user_id' => User::factory(),
-            'parent_id' => null,
+            'type' => fake()->randomElement([1, -1]),
         ];
     }
 }

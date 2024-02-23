@@ -4,25 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MessageReaction extends Model
+class Reply extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'message_id',
+        'content',
         'user_id',
-        'type'
+        'comment_id'
     ];
-
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function message()
+    public function reactions()
     {
-        return $this->belongsTo(Message::class);
+        return $this->morphMany(Reaction::class, 'reactable')->with('user');
     }
 }

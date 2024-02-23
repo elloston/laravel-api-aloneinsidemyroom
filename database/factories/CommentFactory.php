@@ -2,18 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Message;
-use App\Models\MessageReaction;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MessageReaction>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
  */
-class MessageReactionFactory extends Factory
+class CommentFactory extends Factory
 {
-    protected $model = MessageReaction::class;
-
     /**
      * Define the model's default state.
      *
@@ -22,9 +19,9 @@ class MessageReactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'message_id' => Message::factory(),
+            'content' => fake()->text,
             'user_id' => User::factory(),
-            'type' => fake()->randomElement([1, -1]),
+            'post_id' => Post::factory(),
         ];
     }
 }

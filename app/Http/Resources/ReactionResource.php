@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MessageReactionResource extends JsonResource
+class ReactionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,9 @@ class MessageReactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'user' => new UserResource($this->whenLoaded('user')),
             'type' => $this->type,
-            'user' => new UserResource($this->whenLoaded('user'))
+            'updated_at' => $this->updated_at,
         ];
     }
 }

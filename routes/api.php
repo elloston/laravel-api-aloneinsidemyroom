@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\MessageReactionController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\ReactionController;
+use App\Http\Controllers\Api\ReplyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * Auth
+ */
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/signin', [AuthController::class, 'signin']);
 Route::get('/user/{username}', [UserController::class, 'show']);
@@ -27,18 +31,52 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/signout', [AuthController::class, 'signout']);
 });
 
+// Reaction
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/perform_reaction_to/{type}/{id}', [ReactionController::class, 'performReaction']);
+});
 
-Route::get('/messages', [MessageController::class, 'index']);
-Route::get('/messages/{message}', [MessageController::class, 'show']);
+/**
+ * Post
+ */
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{post}', [PostController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/messages', [MessageController::class, 'store']);
-    Route::put('/messages/{message}', [MessageController::class, 'update']);
-    Route::delete('/messages/{message}', [MessageController::class, 'destroy']);
-    // Reactions
-    Route::post('/messages/{message}/like', [MessageReactionController::class, 'like']);
-    Route::post('/messages/{message}/dislike', [MessageReactionController::class, 'dislike']);
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::put('/posts/{post}', [PostController::class, 'update']);
+    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
     // Trashed
-    Route::get('/messages', [MessageController::class, 'trashed']);
-    Route::get('/messages/{message}', [MessageController::class, 'showTrashed']);
+    Route::get('/posts/trashed/', [PostController::class, 'trashed']);
+    Route::get('/posts/trashed/{post}', [PostController::class, 'showTrashed']);
+});
+
+/**
+ * Comment
+ */
+Route::get('/comments', [CommentController::class, 'index']);
+Route::get('/comments/{comment}', [CommentController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/comments', [CommentController::class, 'store']);
+    Route::put('/comments/{comment}', [CommentController::class, 'update']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+    // Trashed
+    Route::get('/comments/trashed/', [CommentController::class, 'trashed']);
+    Route::get('/comments/trashed/{comment}', [CommentController::class, 'showTrashed']);
+});
+
+/**
+ * Reply
+ */
+Route::get('/replies', [ReplyController::class, 'index']);
+Route::get('/replies/{reply}', [ReplyController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/replies', [ReplyController::class, 'store']);
+    Route::put('/replies/{reply}', [ReplyController::class, 'update']);
+    Route::delete('/replies/{reply}', [ReplyController::class, 'destroy']);
+    // Trashed
+    Route::get('/replies/trashed/', [ReplyController::class, 'trashed']);
+    Route::get('/replies/trashed/{reply}', [ReplyController::class, 'showTrashed']);
 });

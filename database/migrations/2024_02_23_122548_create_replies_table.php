@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message_reactions', function (Blueprint $table) {
+        Schema::create('replies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('message_id')->constrained()->onDelete('cascade');
+            $table->longText('content');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->tinyInteger('type')->comment('1 for like, -1 for dislike');
+            $table->foreignId('comment_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
-
-            $table->unique(['message_id', 'user_id'], 'user_message_unique');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message_reactions');
+        Schema::dropIfExists('replies');
     }
 };
