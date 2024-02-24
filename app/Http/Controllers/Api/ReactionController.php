@@ -31,12 +31,14 @@ class ReactionController extends Controller
 
         if ($existingReaction && $existingReaction->type === $reactionType) {
             $existingReaction->delete();
-            return response()->json(['message' => 'Reaction removed'], 200);
+            return response()->json(null, 204);
         } else {
             $reaction = $reactable->reactions()->updateOrCreate(
                 ['user_id' => $user_id],
                 ['type' => $reactionType]
             );
+
+            $reaction->load('user');
             return response()->json($reaction, 200);
         }
     }

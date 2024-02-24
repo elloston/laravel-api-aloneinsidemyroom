@@ -16,7 +16,6 @@ class Comment extends Model
         'post_id'
     ];
 
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -30,5 +29,15 @@ class Comment extends Model
     public function reactions()
     {
         return $this->morphMany(Reaction::class, 'reactable');
+    }
+
+    public function likes()
+    {
+        return $this->morphMany(Reaction::class, 'reactable')->where('type', 1);
+    }
+
+    public function dislikes()
+    {
+        return $this->morphMany(Reaction::class, 'reactable')->where('type', -1);
     }
 }

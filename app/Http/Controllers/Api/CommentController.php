@@ -9,14 +9,33 @@ use App\Models\Comment;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // /**
+    //  * Display a listing of the resource.
+    //  */
+    // public function index()
+    // {
+    //     $comments = Comment::orderBy('created_at', 'desc')
+    //         ->with(['user', 'replies'])
+    //         ->withCount([
+    //             'likes',
+    //             'dislikes',
+    //             'replies' => function ($query) {
+    //                 $query->orderBy('created_at', 'desc')
+    //                     ->withCount(['likes', 'dislikes'])
+    //                     ->take(5);
+    //             },
+    //         ])
+    //         ->paginate(10);
+
+    //     return CommentResource::collection($comments);
+    // }
+
+    public function getCommentsForPost($postId)
     {
-        $comments = Comment::orderBy('created_at', 'desc')
-            ->with(['user', 'replies'])
-            ->paginate(10);
+        $comments = Comment::where('post_id', $postId)
+            ->orderBy('created_at', 'desc')
+            ->withCount(['likes', 'dislikes', 'replies'])
+            ->paginate(5);
 
         return CommentResource::collection($comments);
     }
@@ -28,19 +47,20 @@ class CommentController extends Controller
     {
         $comment = new Comment($request->validated());
         $request->user()->comments()->save($comment);
+        $comment->load(['user', 'replies']);
 
         return response()->json(new CommentResource($comment), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        $comment->load(['user', 'replies']);
+    // /**
+    //  * Display the specified resource.
+    //  */
+    // public function show(Comment $comment)
+    // {
+    //     $comment->load(['user', 'replies']);
 
-        return response()->json(new CommentResource($comment), 200);
-    }
+    //     return response()->json(new CommentResource($comment), 200);
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -48,6 +68,7 @@ class CommentController extends Controller
     public function update(CommentRequest $request, Comment $comment)
     {
         $comment->update($request->validated());
+        $comment->load(['user', 'replies']);
 
         return response()->json(new CommentResource($comment), 200);
     }

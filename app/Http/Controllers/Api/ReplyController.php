@@ -12,11 +12,21 @@ class ReplyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //     $replies = Reply::orderBy('created_at', 'desc')
+    //         ->with(['user'])
+    //         ->paginate(10);
+
+    //     return ReplyResource::collection($replies);
+    // }
+
+    public function getRepliesForComment($commentId)
     {
-        $replies = Reply::orderBy('created_at', 'desc')
-            ->with(['user'])
-            ->paginate(10);
+        $replies = Reply::where('comment_id', $commentId)
+            ->orderBy('created_at', 'desc')
+            ->withCount(['likes', 'dislikes'])
+            ->paginate(5);
 
         return ReplyResource::collection($replies);
     }

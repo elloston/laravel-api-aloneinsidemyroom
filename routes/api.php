@@ -41,8 +41,10 @@ Route::middleware('auth:sanctum')->group(function () {
  */
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
+Route::get('/posts/{postId}/comments', [CommentController::class, 'getCommentsForPost']);
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::post('/posts', [PostController::class, 'store']);
     Route::put('/posts/{post}', [PostController::class, 'update']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
@@ -56,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
  */
 Route::get('/comments', [CommentController::class, 'index']);
 Route::get('/comments/{comment}', [CommentController::class, 'show']);
+Route::get('/comments/{commentId}/replies', [ReplyController::class, 'getRepliesForComment']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments', [CommentController::class, 'store']);

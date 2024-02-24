@@ -25,4 +25,14 @@ class Reply extends Model
     {
         return $this->morphMany(Reaction::class, 'reactable')->with('user');
     }
+
+    public function likes()
+    {
+        return $this->morphMany(Reaction::class, 'reactable')->where('type', 1);
+    }
+
+    public function dislikes()
+    {
+        return $this->morphMany(Reaction::class, 'reactable')->where('type', -1);
+    }
 }

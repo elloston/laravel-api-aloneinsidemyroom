@@ -15,7 +15,15 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')
-            ->with(['user', 'comments'])
+            ->with([
+                'user',
+                'comments' => function ($query) {
+                    $query->orderBy('created_at', 'desc')
+                        ->withCount(['likes', 'dislikes', 'replies'])
+                        ->take(5);
+                }
+            ])
+            ->withCount(['likes', 'dislikes', 'comments'])
             ->paginate(10);
 
         return PostResource::collection($posts);
@@ -28,19 +36,20 @@ class PostController extends Controller
     {
         $post = new Post($request->validated());
         $request->user()->posts()->save($post);
+        $post->load(['user', 'comments', 'reactions']);
 
         return response()->json(new PostResource($post), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Post $post)
-    {
-        $post->load(['user', 'comments']);
+    // /**
+    //  * Display the specified resource.
+    //  */
+    // public function show(Post $post)
+    // {
+    //     $post->load(['user', 'comments', 'reactions']);
 
-        return response()->json(new PostResource($post), 200);
-    }
+    //     return response()->json(new PostResource($post), 200);
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -48,6 +57,7 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $post->update($request->validated());
+        $post->load(['user', 'comments', 'reactions']);
 
         return response()->json(new PostResource($post), 200);
     }
