@@ -26,6 +26,7 @@ class ReplyController extends Controller
         $replies = Reply::where('comment_id', $commentId)
             ->orderBy('created_at', 'desc')
             ->withCount(['likes', 'dislikes'])
+            ->with('user')
             ->paginate(5);
 
         return ReplyResource::collection($replies);
@@ -42,15 +43,15 @@ class ReplyController extends Controller
         return response()->json(new ReplyResource($reply), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Reply $reply)
-    {
-        $reply->load(['user']);
+    // /**
+    //  * Display the specified resource.
+    //  */
+    // public function show(Reply $reply)
+    // {
+    //     $reply->load(['user']);
 
-        return response()->json(new ReplyResource($reply), 200);
-    }
+    //     return response()->json(new ReplyResource($reply), 200);
+    // }
 
     /**
      * Update the specified resource in storage.

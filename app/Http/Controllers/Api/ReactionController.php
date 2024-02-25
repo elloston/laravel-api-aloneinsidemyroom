@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\ReplyResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Reply;
@@ -18,11 +21,7 @@ class ReactionController extends Controller
             return response()->json(['message' => 'Invalid reactable type'], 400);
         }
 
-        $reactable = $modelClass::find($id);
-
-        if (!$reactable) {
-            return response()->json(['message' => 'Reactable not found'], 404);
-        }
+        $reactable = $modelClass::findOrFail($id);
 
         $user_id = $request->user()->id;
         $reactionType = $request->type;
@@ -31,16 +30,23 @@ class ReactionController extends Controller
 
         if ($existingReaction && $existingReaction->type === $reactionType) {
             $existingReaction->delete();
-            return response()->json(null, 204);
         } else {
-            $reaction = $reactable->reactions()->updateOrCreate(
+            $reactable->reactions()->updateOrCreate(
                 ['user_id' => $user_id],
                 ['type' => $reactionType]
             );
-
-            $reaction->load('user');
-            return response()->json($reaction, 200);
         }
+
+        $reactable->loadCount('likes', 'dislikes');
+
+        $resourceMapping = $this->getResourceMapping();
+        $resourceClass = $resourceMapping[$type] ?? null;
+
+        if ($resourceClass) {
+            return response()->json(new $resourceClass($reactable));
+        }
+
+        return response()->json(['message' => 'Resource class not found for the given type'], 500);
     }
 
     protected function getModelClass($type)
@@ -52,5 +58,14 @@ class ReactionController extends Controller
         ];
 
         return $types[$type] ?? null;
+    }
+
+    protected function getResourceMapping()
+    {
+        return [
+            'post' => PostResource::class,
+            'comment' => CommentResource::class,
+            'reply' => ReplyResource::class,
+        ];
     }
 }
