@@ -35,6 +35,7 @@ class CommentController extends Controller
         $comments = Comment::where('post_id', $postId)
             ->orderBy('created_at', 'desc')
             ->withCount(['likes', 'dislikes', 'replies'])
+            ->with('user')
             ->paginate(5);
 
         return CommentResource::collection($comments);
@@ -47,7 +48,7 @@ class CommentController extends Controller
     {
         $comment = new Comment($request->validated());
         $request->user()->comments()->save($comment);
-        $comment->load(['user', 'replies']);
+        $comment->load(['user'])->loadCount('replies');
 
         return response()->json(new CommentResource($comment), 201);
     }

@@ -40,6 +40,8 @@ class ReplyController extends Controller
         $reply = new Reply($request->validated());
         $request->user()->replies()->save($reply);
 
+        $reply->load('user');
+
         return response()->json(new ReplyResource($reply), 201);
     }
 
