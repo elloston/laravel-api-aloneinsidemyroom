@@ -41,15 +41,15 @@ class PostController extends Controller
         return response()->json(new PostResource($post), 201);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  */
-    // public function show(Post $post)
-    // {
-    //     $post->load(['user', 'comments', 'reactions']);
+    /**
+     * Display the specified resource.
+     */
+    public function show(Post $post)
+    {
+        $post->load(['user', 'comments', 'reactions']);
 
-    //     return response()->json(new PostResource($post), 200);
-    // }
+        return response()->json(new PostResource($post), 200);
+    }
 
     /**
      * Update the specified resource in storage.
