@@ -28,6 +28,7 @@ Route::get('/user/{username}', [UserController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UserController::class, 'current']);
+    Route::post('/user/update-avatar', [UserController::class, 'updateAvatar']);
     Route::post('/signout', [AuthController::class, 'signout']);
 });
 

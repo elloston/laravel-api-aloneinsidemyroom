@@ -36,7 +36,17 @@ class PostController extends Controller
     {
         $post = new Post($request->validated());
         $request->user()->posts()->save($post);
-        $post->load(['user', 'comments', 'reactions']);
+        $post->load([
+            'user',
+            'comments' => function ($query) {
+                $query->orderBy('created_at', 'desc')
+                    ->withCount(['likes', 'dislikes', 'replies'])
+                    ->take(5);
+            },
+
+            'reactions'
+        ])
+            ->loadCount(['likes', 'dislikes', 'comments']);
 
         return response()->json(new PostResource($post), 201);
     }
@@ -46,7 +56,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post->load(['user', 'comments', 'reactions']);
+        $post->load(['user', 'comments', 'reactions'])->loadCount(['likes', 'dislikes', 'comments']);;
 
         return response()->json(new PostResource($post), 200);
     }
@@ -56,6 +66,8 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
+        $this->authorize('update', $post);
+
         $post->update($request->validated());
         $post->load(['user', 'comments', 'reactions']);
 
@@ -67,6 +79,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
+
         $post->delete();
 
         return response()->json(null, 204);

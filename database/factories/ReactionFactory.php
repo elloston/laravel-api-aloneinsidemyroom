@@ -21,7 +21,7 @@ class ReactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'message_id' => Reaction::factory(),
+            'reactable_id' => Reaction::factory(),
             'user_id' => User::factory(),
             'type' => fake()->randomElement([1, -1]),
         ];
