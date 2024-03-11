@@ -40,7 +40,7 @@ class UserController extends Controller
         ]);
 
         $file = $request->file('avatar');
-        $newAwatarPath = $file->store('avatars');
+        $newAwatarPath = $file->store('public/avatars');
 
         $user = $request->user();
 
