@@ -40,7 +40,8 @@ class UserController extends Controller
         ]);
 
         $file = $request->file('avatar');
-        $newAwatarPath = $file->store('public/avatars');
+
+        $newAwatarPath = Storage::disk('public')->put('avatars', $file);
 
         $user = $request->user();
 
