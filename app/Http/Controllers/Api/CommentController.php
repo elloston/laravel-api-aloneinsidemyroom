@@ -36,7 +36,7 @@ class CommentController extends Controller
             ->orderBy('created_at', 'desc')
             ->withCount(['likes', 'dislikes', 'replies'])
             ->with('user')
-            ->paginate(5);
+            ->paginate(2);
 
         return CommentResource::collection($comments);
     }

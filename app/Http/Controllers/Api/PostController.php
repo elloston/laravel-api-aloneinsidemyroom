@@ -20,7 +20,7 @@ class PostController extends Controller
                 'comments' => function ($query) {
                     $query->orderBy('created_at', 'desc')
                         ->withCount(['likes', 'dislikes', 'replies'])
-                        ->take(5);
+                        ->take(2);
                 }
             ])
             ->withCount(['likes', 'dislikes', 'comments'])
@@ -41,7 +41,7 @@ class PostController extends Controller
             'comments' => function ($query) {
                 $query->orderBy('created_at', 'desc')
                     ->withCount(['likes', 'dislikes', 'replies'])
-                    ->take(5);
+                    ->take(2);
             },
 
             'reactions'

@@ -27,7 +27,7 @@ class ReplyController extends Controller
             ->orderBy('created_at', 'desc')
             ->withCount(['likes', 'dislikes'])
             ->with('user')
-            ->paginate(5);
+            ->paginate(3);
 
         return ReplyResource::collection($replies);
     }
