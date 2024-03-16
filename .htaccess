@@ -1,3 +1,12 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On RewriteRule ^(.*)$ public/$1 [L]
-</IfModule>
+    # Enable the RewriteEngine
+    RewriteEngine On
+
+    # Redirect all requests to the public/ directory
+    # The [L] flag signifies that this is the last rule to be applied if it matches
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Force HTTPS for security
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  </IfModule>
