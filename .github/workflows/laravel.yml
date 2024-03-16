@@ -54,9 +54,17 @@ jobs:
       - name: Deploy to Beget
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: "-avz --delete --exclude='.env' --exclude='storage/'"
+          ARGS: "-avz --delete --exclude='.env' --exclude='storage/' --exclude='vendor/'"
           SOURCE: "."
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           TARGET: ${{ secrets.REMOTE_DIR }}
+          
+      - name: Update Composer Dependencies on Production
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.REMOTE_USER }}
+          host: ${{ secrets.REMOTE_HOST }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: cd ${{ secrets.REMOTE_DIR }} && composer install --no-dev --optimize-autoloader
