@@ -1,10 +1,3 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On # Если запрос к корневой директории, перенаправляем в
-    public/ RewriteRule ^$ public/ [L] # Если запрашиваемый ресурс существует
-    как файл или директория, используем его напрямую RewriteCond
-    %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -f [OR] RewriteCond
-    %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -d RewriteRule ^(.*)$ public/$1 [L] #
-    Все остальное перенаправляем в index.php в public RewriteCond
-    %{REQUEST_FILENAME} !-f RewriteCond %{REQUEST_FILENAME} !-d RewriteRule
-    ^(.*)$ public/index.php [L]
+    RewriteEngine On RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
