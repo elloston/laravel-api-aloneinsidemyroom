@@ -12,14 +12,14 @@ class ReplyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     $replies = Reply::orderBy('created_at', 'desc')
-    //         ->with(['user'])
-    //         ->paginate(10);
+    public function index()
+    {
+        $replies = Reply::orderBy('created_at', 'desc')
+            ->with(['user'])
+            ->paginate(10);
 
-    //     return ReplyResource::collection($replies);
-    // }
+        return ReplyResource::collection($replies);
+    }
 
     public function getRepliesForComment($commentId)
     {
@@ -48,12 +48,12 @@ class ReplyController extends Controller
     // /**
     //  * Display the specified resource.
     //  */
-    // public function show(Reply $reply)
-    // {
-    //     $reply->load(['user']);
+    public function show(Reply $reply)
+    {
+        $reply->load(['user']);
 
-    //     return response()->json(new ReplyResource($reply), 200);
-    // }
+        return response()->json(new ReplyResource($reply), 200);
+    }
 
     /**
      * Update the specified resource in storage.

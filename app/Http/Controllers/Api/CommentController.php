@@ -12,23 +12,23 @@ class CommentController extends Controller
     // /**
     //  * Display a listing of the resource.
     //  */
-    // public function index()
-    // {
-    //     $comments = Comment::orderBy('created_at', 'desc')
-    //         ->with(['user', 'replies'])
-    //         ->withCount([
-    //             'likes',
-    //             'dislikes',
-    //             'replies' => function ($query) {
-    //                 $query->orderBy('created_at', 'desc')
-    //                     ->withCount(['likes', 'dislikes'])
-    //                     ->take(5);
-    //             },
-    //         ])
-    //         ->paginate(10);
+    public function index()
+    {
+        $comments = Comment::orderBy('created_at', 'desc')
+            ->with(['user', 'replies'])
+            ->withCount([
+                'likes',
+                'dislikes',
+                'replies' => function ($query) {
+                    $query->orderBy('created_at', 'desc')
+                        ->withCount(['likes', 'dislikes'])
+                        ->take(5);
+                },
+            ])
+            ->paginate(10);
 
-    //     return CommentResource::collection($comments);
-    // }
+        return CommentResource::collection($comments);
+    }
 
     public function getCommentsForPost($postId)
     {
@@ -56,12 +56,12 @@ class CommentController extends Controller
     // /**
     //  * Display the specified resource.
     //  */
-    // public function show(Comment $comment)
-    // {
-    //     $comment->load(['user', 'replies']);
+    public function show(Comment $comment)
+    {
+        $comment->load(['user', 'replies']);
 
-    //     return response()->json(new CommentResource($comment), 200);
-    // }
+        return response()->json(new CommentResource($comment), 200);
+    }
 
     /**
      * Update the specified resource in storage.

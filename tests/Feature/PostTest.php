@@ -55,7 +55,7 @@ class PostTest extends TestCase
     public function test_user_can_update_post()
     {
         $user = User::factory()->create();
-        $post = Post::factory()->create();
+        $post = $user->posts()->create(['content' => 'Some content']);
 
         $response = $this->actingAs($user, 'sanctum')->put("/api/posts/{$post->id}", [
             'content' => 'Updated test content',
@@ -70,7 +70,7 @@ class PostTest extends TestCase
     public function test_user_can_delete_post()
     {
         $user = User::factory()->create();
-        $post = Post::factory()->create();
+        $post = $user->posts()->create(['content' => 'Some content']);
 
         $response = $this->actingAs($user, 'sanctum')->delete("/api/posts/{$post->id}");
 
