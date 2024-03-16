@@ -67,4 +67,4 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           host: ${{ secrets.REMOTE_HOST }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: cd ${{ secrets.REMOTE_DIR }} && composer install --no-dev --optimize-autoloader
+          script: cd ${{ secrets.REMOTE_DIR }} && ~/bin/composer install --no-dev --optimize-autoloader
