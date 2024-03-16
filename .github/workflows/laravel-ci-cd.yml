@@ -67,4 +67,4 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           host: ${{ secrets.REMOTE_HOST }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: cd ${{ secrets.REMOTE_DIR }} && export PATH=/usr/local/php/cgi/8.2/bin:$PATH && ~/bin/composer install --no-dev --optimize-autoloader
+          script: cd ${{ secrets.REMOTE_DIR }} && export PATH=/usr/local/php/cgi/8.2/bin:$PATH && ~/bin/composer install --no-dev --optimize-autoloader && php artisan storage:link
