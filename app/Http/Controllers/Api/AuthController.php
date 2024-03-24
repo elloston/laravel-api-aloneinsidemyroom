@@ -73,17 +73,18 @@ class AuthController extends Controller
             ])->first();
 
             if (!$account) {
-                $fakeUsername = $provider . '_user_' . $socialiteUser->getId();
+                $fakeUsername = 'user_' . $socialiteUser->getId();
+                $fakeEmail = $provider . '_user_' . $socialiteUser->getId() . '@example.com';
 
                 $user = User::firstOrCreate(
                     [
-                        'email' => $socialiteUser->getEmail() ?? $fakeUsername . '@example.com',
-                        'username' => $socialiteUser->getNickname() ?? $fakeUsername,
+                        'email' => $socialiteUser->getEmail() ?? $fakeEmail,
                     ],
                     [
-                        'name' => $socialiteUser->getName(),
+                        'username' => $fakeUsername,
+                        'name' => $fakeUsername,
                         'password' => Hash::make(Str::random(24)),
-                        'avatar' => $socialiteUser->getAvatar(),
+                        'avatar' => null,
                     ]
                 );
 
